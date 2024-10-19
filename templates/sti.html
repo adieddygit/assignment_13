@@ -1,0 +1,441 @@
+{% extends "homebase.html" %}
+{% block head %}
+    <meta name = "description" content="Home page for STI data collection">
+{% endblock head %}
+{% block title %}<title>Home</title>{% endblock title %}
+{% block content %}
+<div class="container-fluid">
+     <nav class="tabpage" id="tabpage_2">
+                <p>Chlaymdia and Gonorrhea</p>
+                <div class="container-fluid">
+                    <h1 class="mt-4">Chlaymdia and Gonorrhea</h1>
+                    <h3>Reporting Information</h3>
+                    <div class="msg">{{ msg }}</div>
+                    <form action="/update_sti" method="post">
+                        <div class ="row">
+                            <div class ="form-group">
+                                <label for="client_id">Client ID</label>
+                                <input type="text" class="form-control" id="client_id" name="client_id" value="{{ client_screening_sti.client_id }}" readonly>
+                            </div>
+                            <hr/>
+                        <div class ="row">
+                        <div class="col-5">
+                        <label for="date_of_screening">Date of Screening</label>
+                        </div>
+                        <div class="col-7">
+                        <input type="date" name="date_of_screening" id="date_of_screening" value="{{ client_screening_sti.date_of_screening }}">
+                        </div>
+                        </div>
+                        <hr/>
+                        <div class ="row">
+                        <div class="col-5">
+                        <label for="health_care_provider">Health Care Provider</label>
+                        </div>
+                        <div class="col-7">
+                        <input type="text" name="health_care_provider" id="health_care_provider" value="{{ client_screening_sti.health_care_provider }}">
+                        </div>
+                        </div>
+                        <hr/>
+                        <div class ="row">
+                            <div class="col-5">
+                            <label for="reporter-name">Name of Reporter</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="text" name="reporter_name" id="reporter-name" value="{{ client_screening_sti.reporter_name }}">
+                            </div>
+                            </div>
+                            <hr/>
+
+                            <div class ="row">
+                                <div class="col-5">
+                                <label for="reporter_contact">Contact of Reporter</label>
+                                </div>
+                                <div class="col-7">
+                                <input type="text" name="reporter_contact" id="reporter_contact" value="{{ client_screening_sti.reporter_contact }}">
+                                </div>
+                                </div>
+                                <hr/>
+
+                                <div class ="row">
+                                    <div class="col-5">
+                                    <label for="sexual_partner_gender">Gender of Sexual Partner</label>
+                                    </div>
+                                    <div class="col-7">
+                                    <input type="radio" name="sexual_partner_gender" id="sexual_partner_gender" value="Male"> Male<br/>
+                                    <input type="radio" name="sexual_partner_gender" id="sexual_partner_gender" value="Female"> Female<br/>
+                                    </div>
+                                    </div>
+                                    <hr/>
+
+                        <div class ="row">
+                            <div class="col-5">
+                            <label for="sexual_partner_gender_identity">Sexual Partner Gender Identity</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="radio" name="sexual_partner_gender_identity" id="sexual_partner_gender_identity" value="primary"> Male<br/>
+                            <input type="radio" name="sexual_partner_gender_identity" id="sexual_partner_gender_identity" value="secondary"> Female<br/>
+                            <input type="radio" name="sexual_partner_gender_identity" id="sexual_partner_gender_identity" value="early latent"> Both<br/>
+                            <input type="radio" name="sexual_partner_gender_identity" id="sexual_partner_gender_identity" value="unknown"> Unknown<br/>
+                            </div>
+                            </div>
+                            <hr/>
+                            <div class ="row">
+                            <div class="col-5">
+                            <label for="previous_HIV_screening">Previous HIV Screening</label>
+                            </div>
+                            <div class="col-7">
+                                <input type ="radio" name = "previous_HIV_screening" value = "Yes">Yes<br/>
+                                <input type ="radio" name = "previous_HIV_screening" value = "No">No<br/>
+                                <input type ="radio" name = "previous_HIV_screening" value = "Unknown">Unknown<br/>
+                            If yes, last result was: <input type ="text" name = "typeoftest2"><br/>
+                                 <input type ="radio" name = "previous_HIV_screening_result" value = "positive">Positive<br/>
+                                 <input type ="radio" name = "previous_HIV_screening_result" value = "negative">Negative<br/>
+                                 <input type ="radio" name = "previous_HIV_screening_result" value = "unknown">Unknown<br/>
+
+                            Previous HIV Screening Date: <input type ="date" name = "previous_HIV_screening_date"><br/>
+                            <br/>
+                            <hr/>
+                            <div class ="row">
+                                <div class="col-5">
+                                <label for="screening_type">Screening Type</label>
+                                </div>
+                                <div class="col-7">
+                                    <input type ="radio" name = "screening_type" value = "Chlamydia Positive Result">Chlamydia Positive Result<br/>
+                                    <input type ="radio" name = "screening_type" value = "No">Gonorrhea Positive Result<br/>
+
+                                    <div class ="row">
+                                        <div class="col-5">
+                                        <label for="reason_for_testing">Reasons:</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input type ="radio" name = "reason_for_testing" value = "Symptomatic">Symptomatic<br/>
+                                            <input type ="radio" name = "reason_for_testing" value = "Routine Exam">Routine Exam<br/>
+                                            <input type ="radio" name = "reason_for_testing" value = "Test for Cure">Test for Cure<br/>
+                                            <input type ="radio" name = "reason_for_testing" value = "Exposed to Infection">Exposed to Infection<br/>
+                                            <input type ="radio" name = "reason_for_testing" value = "Pregnant">Pregnant<br/>
+                                            <div class ="row">
+
+                                            <hr/>
+                                                <div class="col-5">
+                                                <label for="site_of_sample_collection">Site Of Sample Collection:</label>
+                                                </div>
+                                                <div class="col-7">
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Cervix">Cervix<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Vaginal">Vaginal<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Urethra">Urethra<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Rectum">Rectum<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Ocular">Ocular<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Urine">Urine<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Pharynx">Pharynx<br/>
+                                                    <input type ="radio" name = "site_of_sample_collection" value = "Other:">Other<br/>
+                                                    Previous HIV Screening Date: <input type ="date" name = "sample_collection_date"><br/>
+                                             <hr/>
+
+                                             <div class="col-5">
+                                                <label for="screening_result">Screening Result:</label>
+                                                </div>
+                                                <div class="col-7">
+                                                    <input type ="radio" name = "screening_result" value = "positive">Positive<br/>
+                                 <input type ="radio" name = "screening_result" value = "negative">Negative<br/>
+                                 <input type ="radio" name = "screening_result" value = "unknown">Unknown<br/>>
+                                <hr/>
+            
+                            <hr/>
+                            <div class ="row">
+                            <div class="col-5">
+                            <label for="diagnosis">Diagnosis</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="radio" name="diagnosis" id="diagnosis" value="positive"> Asymptomatic<br/>
+                            <input type="radio" name="diagnosis" id="diagnosis" value="negative"> Symptomatic-Uncomplicated<br/>
+                            <input type="radio" name="diagnosis" id="diagnosis" value="not tested"> Pelvic Inflammatory Disease (PID)<br/>
+                            <input type="radio" name="diagnosis" id="diagnosis" value="unknown"> Ophthalmia /conjunctivitis<br/>
+                            <input type="radio" name="diagnosis" id="diagnosis" value="unknown"> Disseminated<br/>
+
+                            </div>
+                            </div>
+                
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-5">
+                                    <label for="notes">Add Note</label>
+                                </div>
+                                <div class="col-7">
+                                    <div class="form-group">
+                                        <label for="message">Additional Information</label>
+                                        <textarea id="message" name="message" rows="4" placeholder="Enter any additional information (optional)" value="" ></textarea>
+                                    </div>
+                                </div>
+                                <hr/>
+
+            <h3>STI Treatment</h3>
+
+            <div class ="row">
+                <div class="col-5">
+                <label for="treatment_unique_id">Unique ID</label>
+                </div>
+                <div class="col-7">
+                <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client_treatment_sti.treatment_unique_id }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                <div class="col-5">
+                <label for="date_of_treatment">Date of Screening</label>
+                </div>
+                <div class="col-7">
+                <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client_treatment_sti.date_of_treatment }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                    <div class="col-5">
+                    <label for="reporter_name">Reporter Name</label>
+                    </div>
+                    <div class="col-7">
+                    <input type="date" name="reporter_name" id="reporter_name" value="{{ client_treatment_sti.reporter_name }}">
+                    </div>
+                    </div>
+                    <hr/>
+
+                    <div class ="row">
+                        <div class="col-5">
+                        <label for="reporter_contact">Reporter Contact</label>
+                        </div>
+                        <div class="col-7">
+                        <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client_treatment_sti.reporter_contact }}">
+                        </div>
+                        </div>
+                        <hr/>
+
+                        <div class ="row">
+                            <div class="col-5">
+                            <label for="treatment_type">Reporter Contact</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="date" name="treatment_type" id="treatment_type" value="{{ client_treatment_sti.treatment_type }}">
+                            </div>
+                            </div>
+                            <hr/>
+
+                            <div class ="row">
+                                <div class="col-5">
+                                <label for="treatment_plan">Treatment Plan</label>
+                                </div>
+                                <div class="col-7">
+                                <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client_treatment_sti.treatment_plan }}">
+                                </div>
+                                </div>
+                                <hr/>
+
+                                <div class ="row">
+                                    <div class="col-5">
+                                    <label for="treatment_result">Treatment Result</label>
+                                    </div>
+                                    <div class="col-7">
+                                    <input type="date" name="treatment_result" id="treatment_result" value="{{ client_treatment_sti.treatment_result }}">
+                                    </div>
+                                    </div>
+                                    <hr/>
+
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <label for="notes">Add Note</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="form-group">
+                                                <label for="message">Additional Information</label>
+                                                <textarea id="message" name="message" rows="4" placeholder="Enter any additional information (optional)">{{ patient_health_metrics.notes }}</textarea>
+                                            </div>
+                                        </div>
+                                        <hr/>           
+                                        
+                    <h3>STI Treatment</h3>
+
+            <div class ="row">
+                <div class="col-5">
+                <label for="treatment_unique_id">Unique ID</label>
+                </div>
+                <div class="col-7">
+                <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client_treatment_sti.treatment_unique_id }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                <div class="col-5">
+                <label for="date_of_treatment">Date of Screening</label>
+                </div>
+                <div class="col-7">
+                <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client_treatment_sti.date_of_treatment }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                    <div class="col-5">
+                    <label for="reporter_name">Reporter Name</label>
+                    </div>
+                    <div class="col-7">
+                    <input type="date" name="reporter_name" id="reporter_name" value="{{ client_treatment_sti.reporter_name }}">
+                    </div>
+                    </div>
+                    <hr/>
+
+                    <div class ="row">
+                        <div class="col-5">
+                        <label for="reporter_contact">Reporter Contact</label>
+                        </div>
+                        <div class="col-7">
+                        <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client_treatment_sti.reporter_contact }}">
+                        </div>
+                        </div>
+                        <hr/>
+
+                        <div class ="row">
+                            <div class="col-5">
+                            <label for="treatment_type">Reporter Contact</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="date" name="treatment_type" id="treatment_type" value="{{ client_treatment_sti.treatment_type }}">
+                            </div>
+                            </div>
+                            <hr/>
+
+                            <div class ="row">
+                                <div class="col-5">
+                                <label for="treatment_plan">Treatment Plan</label>
+                                </div>
+                                <div class="col-7">
+                                <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client_treatment_sti.treatment_plan }}">
+                                </div>
+                                </div>
+                                <hr/>
+
+                                <div class ="row">
+                                    <div class="col-5">
+                                    <label for="treatment_result">Treatment Result</label>
+                                    </div>
+                                    <div class="col-7">
+                                    <input type="date" name="treatment_result" id="treatment_result" value="{{ client_treatment_sti.treatment_result }}">
+                                    </div>
+                                    </div>
+                                    <hr/>
+
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <label for="notes">Add Note</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="form-group">
+                                                <label for="message">Additional Information</label>
+                                                <textarea id="message" name="message" rows="4" placeholder="Enter any additional information (optional)">{{ patient_health_metrics.notes }}</textarea>
+                                            </div>
+                                        </div>
+                                        <hr/>           
+                                        
+            <h3>Partner Management of STI</h3>
+
+            <div class ="row">
+                <div class="col-5">
+                <label for="partner_unique_id">Unique ID</label>
+                </div>
+                <div class="col-7">
+                <input type="text" name="partner_unique_id" id="partner_unique_id" value="{{ partner_management_sti.partner_unique_id }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                <div class="col-5">
+                <label for="date_of_partner_management">Date of Partner Management</label>
+                </div>
+                <div class="col-7">
+                <input type="date" name="date_of_partner_management" id="date_of_partner_management" value="{{ partner_management_sti.date_of_partner_management }}">
+                </div>
+                </div>
+                <hr/>
+
+                <div class ="row">
+                    <div class="col-5">
+                    <label for="health_care_provider">Health Care Provider</label>
+                    </div>
+                    <div class="col-7">
+                    <input type="date" name="health_care_provider" id="health_care_provider" value="{{ partner_management_sti.health_care_provider }}">
+                    </div>
+                    </div>
+                    <hr/>
+
+                    <div class ="row">
+                        <div class="col-5">
+                        <label for="reporter_name">Reporter Name</label>
+                        </div>
+                        <div class="col-7">
+                        <input type="date" name="reporter_name" id="reporter_name" value="{{ partner_management_sti.reporter_contact }}">
+                        </div>
+                        </div>
+                        <hr/>
+
+                        <div class ="row">
+                            <div class="col-5">
+                            <label for="reporter_contact">Reporter Contact</label>
+                            </div>
+                            <div class="col-7">
+                            <input type="date" name="reporter_contact" id="reporter_contact" value="{{ partner_management_sti.reporter_contact }}">
+                            </div>
+                            </div>
+                            <hr/>
+
+                            <div class ="row">
+                                <div class="col-5">
+                                <label for="partner_management_type">Partner Management Type</label>
+                                </div>
+                                <div class="col-7">
+                                <input type="date" name="partner_management_type" id="partner_management_type" value="{{ partner_management_sti.partner_management_type }}">
+                                </div>
+                                </div>
+                                <hr/>
+
+                                <div class ="row">
+                                    <div class="col-5">
+                                    <label for="partner_management_plan">Partner Management Plan</label>
+                                    </div>
+                                    <div class="col-7">
+                                    <input type="date" name="partner_management_plan" id="partner_management_plan" value="{{ partner_management_sti.partner_management_plan }}">
+                                    </div>
+                                    </div>
+                                    <hr/>
+
+                                    <div class ="row">
+                                        <div class="col-5">
+                                        <label for="partner_management_result">Partner Management Result</label>
+                                        </div>
+                                        <div class="col-7">
+                                        <input type="date" name="partner_management_result" id="partner_management_result" value="{{ partner_management_sti.partner_management_result }}">
+                                        </div>
+                                        </div>
+                                        <hr/>
+
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <label for="partner_management_notes">Add Note</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="form-group">
+                                                <label for="partner_management_notes">Additional Information</label>
+                                                <textarea id="partner_management_notes" name="partner_management_notes" rows="4" placeholder="Enter any additional information (optional)">{{ partner_management_sti.partner_management_notes }}</textarea>
+                                            </div>
+                                        </div>
+                                        <hr/>           
+    
+
+                                <input type ="submit" value = "Submit" class ="btn btn-danger"> 
+                        </form> 
+                </div>
+            </nav> 
+</div>
+{% endblock content %}
+
