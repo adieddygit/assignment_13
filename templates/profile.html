@@ -146,7 +146,7 @@
                                 <div class ="row">
                                     <div class ="form-group">
                                         <label for="client_id">Client ID</label>
-                                        <input type="text" class="form-control" id="client_id" name="client_id" value="{{ client_screening_sti.client_id }}" readonly>
+                                        <input type="text" class="form-control" id="client_id" name="client_id" value="{{ client.client_id }}" readonly>
                                     </div>
                                     <hr/>
 
@@ -155,7 +155,7 @@
                                    <label for="date_of_screening">Date of Screening</label>
                                    </div>
                                    <div class="col-7"> -->
-                                   <input type="date" name="date_of_screening" id="date_of_screening" value="{{ client_screening_sti.date_of_screening }}"> -->
+                                   <input type="date" name="date_of_screening" id="date_of_screening" value="{{ client.date_of_screening }}"> -->
                                    </div>
                                    </div>
                                    <hr/>
@@ -164,7 +164,7 @@
                                    <label for="health_care_provider">Health Care Provider</label>
                                    </div>
                                    <div class="col-7">
-                                   <input type="text" name="health_care_provider" id="health_care_provider" value="{{ client_screening_sti.health_care_provider }}">
+                                   <input type="text" name="health_care_provider" id="health_care_provider" value="{{ client.health_care_provider }}">
                                    </div>
                                    </div>
                                    <hr/>
@@ -173,7 +173,7 @@
                                        <label for="reporter-name">Name of Reporter</label>
                                        </div>
                                        <div class="col-7">
-                                       <input type="text" name="reporter_name" id="reporter-name" value="{{ client_screening_sti.reporter_name }}">
+                                       <input type="text" name="reporter_name" id="reporter-name" value="{{ client.reporter_name }}">
                                        </div>
                                        </div>
                                        <hr/>
@@ -183,7 +183,7 @@
                                            <label for="reporter_contact">Contact of Reporter</label>
                                            </div>
                                            <div class="col-7">
-                                           <input type="text" name="reporter_contact" id="reporter_contact" value="{{ client_screening_sti.reporter_contact }}">
+                                           <input type="text" name="reporter_contact" id="reporter_contact" value="{{ client.reporter_contact }}">
                                            </div>
                                            </div>
                                            <hr/>
@@ -308,7 +308,7 @@
                            <label for="treatment_unique_id">Unique ID</label>
                            </div>
                            <div class="col-7">
-                           <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client_treatment_sti.treatment_unique_id }}">
+                           <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client.treatment_unique_id }}">
                            </div>
                            </div>
                            <hr/>
@@ -318,7 +318,7 @@
                            <label for="date_of_treatment">Date of Screening</label>
                            </div>
                            <div class="col-7">
-                           <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client_treatment_sti.date_of_treatment }}">
+                           <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client.date_of_treatment }}">
                            </div>
                            </div>
                            <hr/>
@@ -328,7 +328,7 @@
                                <label for="reporter_name">Reporter Name</label>
                                </div>
                                <div class="col-7">
-                               <input type="date" name="reporter_name" id="reporter_name" value="{{ client_treatment_sti.reporter_name }}">
+                               <input type="date" name="reporter_name" id="reporter_name" value="{{ client.reporter_name }}">
                                </div>
                                </div>
                                <hr/>
@@ -338,7 +338,7 @@
                                    <label for="reporter_contact">Reporter Contact</label>
                                    </div>
                                    <div class="col-7">
-                                   <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client_treatment_sti.reporter_contact }}">
+                                   <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client.reporter_contact }}">
                                    </div>
                                    </div>
                                    <hr/>
@@ -348,7 +348,7 @@
                                        <label for="treatment_type">Reporter Contact</label>
                                        </div>
                                        <div class="col-7">
-                                       <input type="date" name="treatment_type" id="treatment_type" value="{{ client_treatment_sti.treatment_type }}">
+                                       <input type="date" name="treatment_type" id="treatment_type" value="{{ client.treatment_type }}">
                                        </div>
                                        </div>
                                        <hr/>
@@ -358,7 +358,7 @@
                                            <label for="treatment_plan">Treatment Plan</label>
                                            </div>
                                            <div class="col-7">
-                                           <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client_treatment_sti.treatment_plan }}">
+                                           <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client.treatment_plan }}">
                                            </div>
                                            </div>
                                            <hr/>
@@ -368,19 +368,19 @@
                                                <label for="treatment_result">Treatment Result</label>
                                                </div>
                                                <div class="col-7">
-                                               <input type="date" name="treatment_result" id="treatment_result" value="{{ client_treatment_sti.treatment_result }}">
+                                               <input type="date" name="treatment_result" id="treatment_result" value="{{ client.treatment_result }}">
                                                </div>
                                                </div>
                                                <hr/>
            
                                                <div class="row">
                                                    <div class="col-5">
-                                                       <label for="notes">Add Note</label>
+                                                       <label for="treatment_notes">Add Note</label>
                                                    </div>
                                                    <div class="col-7">
                                                        <div class="form-group">
-                                                           <label for="message">Additional Information</label>
-                                                           <textarea id="message" name="message" rows="4" placeholder="Enter any additional information (optional)">{{ patient_health_metrics.notes }}</textarea>
+                                                           <label for="treatment_notes">Additional Information</label>
+                                                           <textarea id="treatment_notes" name="treatment_notes" rows="4" placeholder="Enter any additional information (optional)">{{ client.treatment_notes }}</textarea>
                                                        </div>
                                                    </div>
                                                    <hr/>           
@@ -392,7 +392,7 @@
                            <label for="treatment_unique_id">Unique ID</label>
                            </div>
                            <div class="col-7">
-                           <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client_treatment_sti.treatment_unique_id }}">
+                           <input type="text" name="treatment_unique_id" id="treatment_unique_id" value="{{ client.treatment_unique_id }}">
                            </div>
                            </div>
                            <hr/>
@@ -402,7 +402,7 @@
                            <label for="date_of_treatment">Date of Screening</label>
                            </div>
                            <div class="col-7">
-                           <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client_treatment_sti.date_of_treatment }}">
+                           <input type="date" name="date_of_treatment" id="date_of_treatment" value="{{ client.date_of_treatment }}">
                            </div>
                            </div>
                            <hr/>
@@ -412,7 +412,7 @@
                                <label for="reporter_name">Reporter Name</label>
                                </div>
                                <div class="col-7">
-                               <input type="date" name="reporter_name" id="reporter_name" value="{{ client_treatment_sti.reporter_name }}">
+                               <input type="date" name="reporter_name" id="reporter_name" value="{{ client.reporter_name }}">
                                </div>
                                </div>
                                <hr/>
@@ -422,7 +422,7 @@
                                    <label for="reporter_contact">Reporter Contact</label>
                                    </div>
                                    <div class="col-7">
-                                   <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client_treatment_sti.reporter_contact }}">
+                                   <input type="date" name="reporter_contact" id="reporter_contact" value="{{ client.reporter_contact }}">
                                    </div>
                                    </div>
                                    <hr/>
@@ -432,7 +432,7 @@
                                        <label for="treatment_type">Reporter Contact</label>
                                        </div>
                                        <div class="col-7">
-                                       <input type="date" name="treatment_type" id="treatment_type" value="{{ client_treatment_sti.treatment_type }}">
+                                       <input type="date" name="treatment_type" id="treatment_type" value="{{ client.treatment_type }}">
                                        </div>
                                        </div>
                                        <hr/>
@@ -442,7 +442,7 @@
                                            <label for="treatment_plan">Treatment Plan</label>
                                            </div>
                                            <div class="col-7">
-                                           <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client_treatment_sti.treatment_plan }}">
+                                           <input type="date" name="treatment_plan" id="treatment_plan" value="{{ client.treatment_plan }}">
                                            </div>
                                            </div>
                                            <hr/>
@@ -452,7 +452,7 @@
                                                <label for="treatment_result">Treatment Result</label>
                                                </div>
                                                <div class="col-7">
-                                               <input type="date" name="treatment_result" id="treatment_result" value="{{ client_treatment_sti.treatment_result }}">
+                                               <input type="date" name="treatment_result" id="treatment_result" value="{{ client.treatment_result }}">
                                                </div>
                                                </div>
                                                <hr/>
@@ -463,8 +463,8 @@
                                                    </div>
                                                    <div class="col-7">
                                                        <div class="form-group">
-                                                           <label for="message">Additional Information</label>
-                                                           <textarea id="message" name="message" rows="4" placeholder="Enter any additional information (optional)">{{ patient_health_metrics.notes }}</textarea>
+                                                           <label for="treatment_notes">Additional Information</label>
+                                                           <textarea id="treatment_notes" name="treatment_notes" rows="4" placeholder="Enter any additional information (optional)">{{ client.treatment_notes }}</textarea>
                                                        </div>
                                                    </div>
                                                    <hr/>           
