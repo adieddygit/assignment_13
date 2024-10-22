@@ -175,7 +175,6 @@ def register_client():
                                       VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}', '{unique_id}+infant')"))
             con.execute(text(f"INSERT INTO congenital_syphilis_infant(created_by, created_at,updated_at, updated_by, infant_unique_id)\
                                       VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}+infant')"))
-            
             con.execute(text(f"INSERT INTO hepatitis_b_mothers(created_by, created_at, updated_at, updated_by, unique_id)\
                                       VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}')"))
             con.execute(text(f"INSERT INTO partner_management_sti(created_by, created_at, updated_at, updated_by, unique_id)\
@@ -191,7 +190,7 @@ def register_client():
 @app.route('/retrieve_client', methods=['POST'])
 def retrieve_client():
     msg = ''
-    #get the client_id from the urlß
+    #get the client_id from the url
     client_id = request.form['client_id']
     #validate the client_id
     #if the client_id is not valid, redirect to the home page
@@ -239,6 +238,7 @@ def update_profile():
                 client_profile = result_profile.fetchone()
                 con.commit()
             if client_profile:
+                #display the client data
                 update_at = datetime.now()
                 updated_by = session['username']
                 first_name = request.form['first_name']

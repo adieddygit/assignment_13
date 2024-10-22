@@ -50,7 +50,6 @@ class ClientProfile(Base, BaseModel):
 
 class ClientScreening(BaseModel, Base):
     __tablename__ = "screening_sti"
-
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, insert_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime, insert_default=func.now())
