@@ -167,7 +167,7 @@ def register_client():
                                     )"))
             
             con.execute(text(f"INSERT INTO screening_sti(created_by, created_at, updated_at, updated_by, unique_id)\
-                                      VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}')"))
+                                    VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}')"))
         
             con.execute(text(f"INSERT INTO treatment_sti(created_by, created_at, updated_at, updated_by, unique_id)\
                                       VALUES('{created_by}','{created_at}', '{updated_at}', '{updated_by}','{unique_id}')"))
@@ -187,44 +187,47 @@ def register_client():
     return render_template('home.html')
 
 #The retieve client page based on passed client_id
+from flask import render_template, request, redirect, url_for, session
+from sqlalchemy import text
+from datetime import datetime
+
 @app.route('/retrieve_client', methods=['POST'])
 def retrieve_client():
     msg = ''
-    #get the client_id from the url
     client_id = request.form['client_id']
-    #validate the client_id
-    #if the client_id is not valid, redirect to the home page
-    #if the client_id is valid, continue
+    
+    # Check if the user is logged in
     if 'loggedin' in session:
         if client_id:
-            #get the client data from the database
+            # Retrieve all client-related information from the database securely
             with engine.connect() as con:
-                result_profile = con.execute(text(f"SELECT * FROM client_profile WHERE unique_id = '{client_id}'"))
-                result_hepatitis = con.execute(text(f"SELECT * FROM hepatitis_b_mothers WHERE unique_id = '{client_id}'"))
-                result_screening_sti = con.execute(text(f"SELECT * FROM screening_sti WHERE unique_id = '{client_id}'"))
-                result_treatment_sti = con.execute(text(f"SELECT * FROM treatment_sti WHERE unique_id = '{client_id}'"))
-                result_congenital_syphilis_mothers = con.execute(text(f"SELECT * FROM congenital_syphilis_mothers WHERE unique_id = '{client_id}'"))
-                result_congenital_syphilis_infant = con.execute(text(f"SELECT * FROM congenital_syphilis_infant WHERE infant_unique_id = '{client_id}+infant'"))
-                result_partner_management_sti = con.execute(text(f"SELECT * FROM partner_management_sti WHERE unique_id = '{client_id}'"))
+                query = """
+                    SELECT * FROM client_profile WHERE unique_id = :client_id;
+                    SELECT * FROM hepatitis_b_mothers WHERE unique_id = :client_id;
+                    SELECT * FROM screening_sti WHERE unique_id = :client_id;
+                    SELECT * FROM treatment_sti WHERE unique_id = :client_id;
+                    SELECT * FROM congenital_syphilis_mothers WHERE unique_id = :client_id;
+                    SELECT * FROM congenital_syphilis_infant WHERE infant_unique_id = :infant_unique_id;
+                    SELECT * FROM partner_management_sti WHERE unique_id = :client_id;
+                """
+                # Perform secure parameterized queries
+                result_profile = con.execute(text("SELECT * FROM client_profile WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
+                result_hepatitis = con.execute(text("SELECT * FROM hepatitis_b_mothers WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
+                result_screening_sti = con.execute(text("SELECT * FROM screening_sti WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
+                result_treatment_sti = con.execute(text("SELECT * FROM treatment_sti WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
+                result_congenital_syphilis_mothers = con.execute(text("SELECT * FROM congenital_syphilis_mothers WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
+                result_congenital_syphilis_infant = con.execute(text("SELECT * FROM congenital_syphilis_infant WHERE infant_unique_id = :infant_unique_id"), {'infant_unique_id': f"{client_id}+infant"}).fetchone()
+                result_partner_management_sti = con.execute(text("SELECT * FROM partner_management_sti WHERE unique_id = :client_id"), {'client_id': client_id}).fetchone()
 
-                client_profile = result_profile.fetchone()
-                client_hepatitis = result_hepatitis.fetchone()
-                client_screening_sti = result_screening_sti.fetchone()
-                client_treatment_sti = result_treatment_sti.fetchone()
-                client_congenital_syphilis_mothers = result_congenital_syphilis_mothers.fetchone()
-                client_congenital_syphilis_infant = result_congenital_syphilis_infant.fetchone()
-                client_partner_management_sti = result_partner_management_sti.fetchone()
-
-                con.commit()
-            if client_profile and client_hepatitis and client_screening_sti and client_treatment_sti and client_congenital_syphilis_mothers and client_congenital_syphilis_infant and client_partner_management_sti:
-                #display the client data
-                return render_template('profile.html', client = client_profile, hepatitis = client_hepatitis, screening_sti = client_screening_sti, treatment_sti = client_treatment_sti, congenital_syphilis_mothers = client_congenital_syphilis_mothers, congenital_syphilis_infant = client_congenital_syphilis_infant, partner_management_sti = client_partner_management_sti)
-                                     
+            if all([result_profile, result_hepatitis, result_screening_sti, result_treatment_sti, result_congenital_syphilis_mothers, result_congenital_syphilis_infant, result_partner_management_sti]):
+                # Render the profile template with client data
+                return render_template('profile.html', client=result_profile, hepatitis=result_hepatitis, screening_sti=result_screening_sti, treatment_sti=result_treatment_sti, congenital_syphilis_mothers=result_congenital_syphilis_mothers, congenital_syphilis_infant=result_congenital_syphilis_infant, partner_management_sti=result_partner_management_sti)
             else:
-                #redirect to the home page
                 msg = 'The client does not exist.'
-                return redirect(url_for('home', msg = msg))
+                return redirect(url_for('home', msg=msg))
+    
     return redirect(url_for('login'))
+
     
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
@@ -239,7 +242,7 @@ def update_profile():
                 con.commit()
             if client_profile:
                 #display the client data
-                update_at = datetime.now()
+                updated_at = datetime.now()
                 updated_by = session['username']
                 first_name = request.form['first_name']
                 last_name = request.form['last_name']
@@ -261,7 +264,7 @@ def update_profile():
                 ethnicity = request.form['ethnicity']
                 race = request.form['race']
                 with engine.connect() as con:
-                    result = con.execute(text(f"UPDATE client_profile SET updated_at = '{update_at}', updated_by = '{updated_by}',\
+                    result = con.execute(text(f"UPDATE client_profile SET updated_at = '{updated_at}', updated_by = '{updated_by}',\
                                               first_name = '{first_name}', last_name = '{last_name}',\
                                                 middle_name = '{middle_name}', date_of_birth = '{date_of_birth}',\
                                                 country_of_birth = '{country_of_birth}', gender = '{gender}',\
@@ -293,7 +296,7 @@ def update_congenital_syphilis():
                 con.commit()
             
             if report_data:
-                update_at = datetime.now()
+                updated_at = datetime.now()
                 updated_by = session['username']
                 report_date = request.form['report-date']
                 mother_unique_id = request.form['mother-unique-id']
@@ -308,7 +311,7 @@ def update_congenital_syphilis():
                 with engine.connect() as con:
                     result = con.execute(text(f"""
                         UPDATE congenital_syphilis 
-                        SET updated_at = '{update_at}', updated_by = '{updated_by}',
+                        SET updated_at = '{updated_at}', updated_by = '{updated_by}',
                             report_date = '{report_date}', mother_unique_id = '{mother_unique_id}',
                             non_trep_tests = '{non_trep_tests_str}'
                         WHERE unique_id = '{client_id}'
@@ -324,23 +327,25 @@ def update_congenital_syphilis():
             
             
 @app.route('/update_sti', methods=['POST'])
-def update_syphilis():
+def update_sti():
     msg = ""
     client_id = request.form['unique_id']
 
     if 'loggedin' in session:
         if client_id:
-            # Fetch the report data from the database
+            print(f"Client ID: {client_id}")  # Debugging
             with engine.connect() as con:
-                result_report = con.execute(text(f"SELECT * FROM screening_sti WHERE unique_id = '{client_id}'"))
-                report_data = result_report.fetchone()
+                result_sti = con.execute(text(f"SELECT * FROM screening_sti WHERE unique_id = :client_id"), {'client_id': client_id})
+                screening_sti = result_sti.fetchone()
                 con.commit()
+                print(f"Fetched data: {screening_sti}")
 
-            if report_data:
-                update_at = datetime.now()
+            if screening_sti:
+                updated_at = datetime.now()
                 updated_by = session['username']
 
-                # Client screning STI
+                # Client screening STI
+                unique_id = request.form['unique_id']
                 date_of_screening = request.form['date_of_screening']
                 health_care_provider = request.form['health_care_provider']
                 reporter_name = request.form['reporter_name']
@@ -356,61 +361,108 @@ def update_syphilis():
                 sample_collection_date = request.form['sample_collection_date']
                 screening_result = request.form['screening_result']
                 diagnosis = request.form['diagnosis']
-                additional_notes = request.form['additional_notes']
+                screening_notes = request.form['screening_notes']
 
                 # STI Treatment data
-                treatment_unique_id = request.form['treatment_unique_id']
-                date_of_treatment = request.form['date_of_treatment']
+                unique_id = request.form['unique_id']
                 treatment_reporter_name = request.form['reporter_name']
                 treatment_reporter_contact = request.form['reporter_contact']
                 treatment_type = request.form['treatment_type']
                 treatment_plan = request.form['treatment_plan']
-                treatment_result = request.form['treatment_result']
                 treatment_notes = request.form['treatment_notes']
+                treatment_result = request.form['treatment_result']
 
                 # Partner Management of STI section
-                partner_unique_id = request.form.get('partner_unique_id')
+                unique_id = request.form.get('unique_id')
                 date_of_partner_management = request.form.get('date_of_partner_management')
-                health_care_provider = request.form.get('health_care_provider')
-                reporter_name = request.form.get('reporter_name')
-                reporter_contact = request.form.get('reporter_contact')
                 partner_management_type = request.form.get('partner_management_type')
                 partner_management_plan = request.form.get('partner_management_plan')
                 partner_management_result = request.form.get('partner_management_result')
                 partner_management_notes = request.form.get('partner_management_notes')
 
-                # Update report in the database
-                with engine.connect() as con:
-                    con.execute(text(f"""
-                        UPDATE sti_report 
-                        SET updated_at = '{update_at}', updated_by = '{updated_by}', 
-                            date_of_screening = '{date_of_screening}', health_care_provider = '{health_care_provider}',
-                            reporter_name = '{reporter_name}', reporter_contact = '{reporter_contact}', 
-                            sexual_partner_gender = '{sexual_partner_gender}', sexual_partner_gender_identity = '{sexual_partner_gender_identity}', 
-                            previous_HIV_screening = '{previous_HIV_screening}', previous_HIV_screening_result = '{previous_HIV_screening_result}', 
-                            previous_HIV_screening_date = '{previous_HIV_screening_date}', screening_type = '{screening_type}', 
-                            reason_for_testing = '{reason_for_testing}', site_of_sample_collection = '{site_of_sample_collection}', 
-                            sample_collection_date = '{sample_collection_date}', screening_result = '{screening_result}', 
-                            diagnosis = '{diagnosis}', additional_notes = '{additional_notes}', 
-                            treatment_unique_id = '{treatment_unique_id}', date_of_treatment = '{date_of_treatment}', 
-                            treatment_reporter_name = '{treatment_reporter_name}', treatment_reporter_contact = '{treatment_reporter_contact}', 
-                            treatment_type = '{treatment_type}', treatment_plan = '{treatment_plan}', treatment_notes = '{treatment_notes}', 
-                            treatment_result = '{treatment_result}', partner_unique_id = '{partner_unique_id}', date_of_partner_management = '{date_of_partner_management}',
-                            health_care_provider = '{health_care_provider}', reporter_name = '{reporter_name}', reporter_contact = '{reporter_contact}',partner_management_result = '{partner_management_result}',
-                            partner_management_notes = '{partner_management_notes}', partner_management_type = '{partner_management_type}', partner_management_plan = '{partner_management_plan}', 
-                        WHERE unique_id = '{client_id}'
-                    """))
-                    con.commit()
+                # Log form data for debugging
+                for field, value in request.form.items():
+                    print(f"{field}: {value}")
 
-                msg = "sti report updated successfully"
+                # Update report in the database
+                update_query = """
+                    UPDATE screening_sti 
+                    SET updated_at = :updated_at, updated_by = :updated_by,
+                        date_of_screening = :date_of_screening, health_care_provider = :health_care_provider,
+                        reporter_name = :reporter_name, reporter_contact = :reporter_contact,
+                        sexual_partner_gender = :sexual_partner_gender, sexual_partner_gender_identity = :sexual_partner_gender_identity,
+                        previous_HIV_screening = :previous_HIV_screening, previous_HIV_screening_result = :previous_HIV_screening_result,
+                        previous_HIV_screening_date = :previous_HIV_screening_date, screening_type = :screening_type,
+                        reason_for_testing = :reason_for_testing, site_of_sample_collection = :site_of_sample_collection,
+                        sample_collection_date = :sample_collection_date, screening_result = :screening_result,
+                        diagnosis = :diagnosis, screening_notes = :screening_notes, 
+                        treatment_reporter_name = :treatment_reporter_name, treatment_reporter_contact = :treatment_reporter_contact,
+                        treatment_type = :treatment_type, treatment_plan = :treatment_plan,
+                        treatment_notes = :treatment_notes, treatment_result = :treatment_result,
+                        date_of_partner_management = :date_of_partner_management,
+                        partner_management_type = :partner_management_type, partner_management_plan = :partner_management_plan,
+                        partner_management_result = :partner_management_result, partner_management_notes = :partner_management_notes
+                    WHERE unique_id = :client_id
+                """
+                
+                params = {
+                    'updated_at': updated_at,
+                    'updated_by': updated_by,
+                    'unique_id': unique_id,
+                    'date_of_screening': date_of_screening,
+                    'health_care_provider': health_care_provider,
+                    'reporter_name': reporter_name,
+                    'reporter_contact': reporter_contact,
+                    'sexual_partner_gender': sexual_partner_gender,
+                    'sexual_partner_gender_identity': sexual_partner_gender_identity,
+                    'previous_HIV_screening': previous_HIV_screening,
+                    'previous_HIV_screening_result': previous_HIV_screening_result,
+                    'previous_HIV_screening_date': previous_HIV_screening_date,
+                    'screening_type': screening_type,
+                    'reason_for_testing': reason_for_testing,
+                    'site_of_sample_collection': site_of_sample_collection,
+                    'sample_collection_date': sample_collection_date,
+                    'screening_result': screening_result,
+                    'diagnosis': diagnosis,
+                    'screening_notes': screening_notes, 
+                    'unique_id': unique_id,
+                    'treatment_reporter_name': treatment_reporter_name,
+                    'treatment_reporter_contact': treatment_reporter_contact,
+                    'treatment_type': treatment_type,
+                    'treatment_plan': treatment_plan,
+                    'treatment_notes': treatment_notes,
+                    'treatment_result': treatment_result,
+                    'unique_id': unique_id,
+                    'date_of_partner_management': date_of_partner_management,
+                    'partner_management_type': partner_management_type,
+                    'partner_management_plan': partner_management_plan,
+                    'partner_management_result': partner_management_result,
+                    'partner_management_notes': partner_management_notes,
+                    'unique_id': client_id
+                }
+
+                print(f"Executing query: {update_query}")
+                print(f"With parameters: {params}")
+
+                try:
+                    with engine.begin() as con:
+                        result = con.execute(text(update_query), params)
+                        con.commit()
+                        affected_rows = result.rowcount
+                        print(f"Affected rows: {affected_rows}")
+                        if affected_rows > 0:
+                            print("Database commit successful")
+                        else:
+                            print("No rows updated. Check the client_id or query.")
+                except Exception as e:
+                    print(f"Error during database operation: {e}")
+
+                msg = "STI screening report updated successfully"
                 return render_template('home.html', msg=msg)
             else:
-                # Redirect to home page if report not found
                 msg = 'The report does not exist.'
                 return redirect(url_for('home', msg=msg))
-        else:
-            msg = 'No report ID provided.'
-            return redirect(url_for('home', msg=msg))
+
 
 if __name__ == '__main__':
-    app.run(port=8080, debug=True)
+    app.run(debug=True)
